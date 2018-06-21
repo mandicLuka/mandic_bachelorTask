@@ -1,0 +1,38 @@
+<launch>
+
+	<!-- Vehicle names -->
+	<rosparam param="vehicleNames">['alpha','delta']</rosparam>
+
+
+	<rosparam param="robotWidth">0.35</rosparam> 	      <!-- ROBOT WIDTH -->
+	<rosparam param="delta">0.05</rosparam>		      <!-- DELTA -->
+	<rosparam param="lookahead">0.1</rosparam>	      <!-- LOOKAHEAD DISTANCE -->
+	<rosparam param="timeStamp">100</rosparam>	      <!-- IN HERTZ -->
+	<rosparam param="linearVelocity">0.23</rosparam>      <!-- LINEAR VELOCITY -->
+	<rosparam param="angularVelocity">1.0</rosparam>  	      <!-- ANGULAR VELOCITY -->
+	<rosparam param="spawn1">[1.6,1.4,0.0]</rosparam>   <!-- FIRST ROBOT -->
+	<rosparam param="spawn2">[2.4,1.4,0.0]</rosparam>   <!-- SECOND ROBOT -->
+	<rosparam param="safety">0.25</rosparam>  	      <!-- BETA -->
+
+
+	<arg name="vehicle_name" default="Alfa"/>
+ 	<arg name="amcl_prefix" default="$(arg vehicle_name)"/>
+ 	<arg name="map_file" default="$(find pioneer_simulator)/maps/across.yaml"/>  <!-- MAP -->
+  	<arg name="scan_topic" default="scan"/>
+  	<arg name="initial_pose_file"/>
+
+
+
+    <node pkg="pioneer_simulator" name="pioneerSimulator" type="pioneerSimulator" output="screen"/>
+    <node pkg="pioneer_simulator" name="publisher" type="publisher" output="screen"/>
+    <node pkg="pioneer_simulator" name="loadMaker" type="loadMaker" output="screen"/>
+    <node pkg="pioneer_simulator" name="pathFollowing" type="pathFollowing" output="screen"/>
+    <node pkg="rviz" name="rviz" type="rviz"  args="-d $(find pioneer_simulator)/rviz_config/rviz_config.rviz"/>
+    <node pkg="map_server" type="map_server" name="map_server"
+        args="$(arg map_file)" output="screen" >
+   <!-- <param name="frame_id" value="$(arg amcl_prefix)/map_loc"/> -->
+    <remap from="map" to="$(arg amcl_prefix)/map_loc"/>
+  </node>
+
+
+</launch>

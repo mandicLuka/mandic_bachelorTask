@@ -1,0 +1,15 @@
+<launch>
+  <arg name="vehicle_name"/>    
+  <arg name="amcl_prefix" default="$(arg vehicle_name)"/>    
+  <arg name="map_file" default="$(find skilled_lgv_utils)/maps/localization_map.yaml"/>
+  <arg name="scan_topic" default="scan"/>
+  <arg name="initial_pose_file"/>
+
+  <node pkg="map_server" type="map_server" name="map_server_localization$(arg vehicle_name)"
+        args="$(arg map_file)" output="screen" >     
+            
+    <param name="frame_id" value="$(arg amcl_prefix)/map_loc"/>
+    <remap from="map" to="$(arg amcl_prefix)/map_loc"/>
+  </node>           
+       
+</launch>
